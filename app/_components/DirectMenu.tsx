@@ -3,7 +3,7 @@ import { menuItems } from '../_assets/_images/contants';
 
 export default function DirectMenu() {
   return (
-    <div className='flex justify-center items-center gap-4 w-fit'>
+    <div className='menu flex justify-center items-center gap-4 w-fit'>
       {menuItems.map((menu) => (
         <MenuItem
           key={menu.title}
@@ -19,7 +19,7 @@ function MenuItem(props: any) {
 
   return (
     <div className=' relative group '>
-      <div className='flex items-center gap-2 group-hover:bg-white/80 rounded-[70px] px-4 py-2'>
+      <div className=' menu-header flex items-center gap-2 group-hover:bg-white/80 rounded-[70px] px-4 py-2'>
         {categories ? (
           <>
             <p className='cursor-default'>{title}</p>
@@ -30,9 +30,9 @@ function MenuItem(props: any) {
               aria-hidden='true'
               className='duration-200 w-[15px] h-[15px] opacity-40 rotate-180 group-hover:rotate-0'>
               <path
-                fill-rule='evenodd'
+                fillRule='evenodd'
                 d='M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z'
-                clip-rule='evenodd'></path>
+                clipRule='evenodd'></path>
             </svg>
           </>
         ) : (
