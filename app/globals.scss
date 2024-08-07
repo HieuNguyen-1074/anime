@@ -70,6 +70,7 @@
 
 body{
   font-size: 13px;
+  font-weight: 600;
 }
 .wrapper::before{
   content : "" ; 
@@ -81,6 +82,7 @@ body{
   left : 0 ;
   z-index : 10 ;
   background:rgba(0,0,0);
+  pointer-events: none;
 }
 
 body.scrolled{
@@ -89,10 +91,14 @@ body.scrolled{
   }
   .menu-header{
    
-      a , p , svg{
+      a , p {
         transition:  all .3s ease-in-out;
         color: white;
+        &:hover{
+          color: black;
+        }
       }
+      
       
     
   }
