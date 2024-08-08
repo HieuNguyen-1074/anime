@@ -89,14 +89,24 @@ body.scrolled{
   .wrapper::before{
     opacity:0.4 ;
   }
+  .btn-connect{
+    color: white !important;
+  }
+  .btn-connect:hover{
+    color: rgb(0, 0, 0) !important;
+  }
+  .menu-item:hover .menu-header{
+          a , p {
+          color: black !important;
+      
+    }
+  }
   .menu-header{
    
       a , p {
         transition:  all .3s ease-in-out;
         color: white;
-        &:hover{
-          color: black;
-        }
+        
       }
       
       

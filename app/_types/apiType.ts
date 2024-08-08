@@ -2,13 +2,22 @@ type Card = {
   _id: {
     $oid: string; // MongoDB ObjectId as a string
   };
-  category: any;
+  category: Category;
   address: string; // Ethereum address
   categoryId: string; // Category ID
   name: string; // Name of the entity
   x: string; // X's URL
   image: string; // URL to an image
   isWrapper: boolean; // Boolean indicating if it's a wrapper
+};
+
+type Category = {
+  _id: {
+    $oid: string;
+  };
+  name: string;
+  rank: number;
+  image: string;
 };
 
 type CollectionItem = {

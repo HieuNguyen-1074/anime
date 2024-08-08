@@ -18,7 +18,7 @@ function MenuItem(props: any) {
   const { title, categories, bottoms, link } = props.menu;
 
   return (
-    <div className=' relative group '>
+    <div className=' relative group menu-item'>
       <div className=' menu-header flex items-center gap-2 group-hover:bg-white/80 rounded-[70px] px-4 py-2'>
         {categories ? (
           <>

@@ -8,7 +8,7 @@ export default function Header() {
         azuki
       </h1>
       <DirectMenu />
-      <button className='flex items-center gap-2 hover:bg-white/85 rounded-[70px] px-4 py-2'>
+      <button className='btn-connect flex items-center gap-2 hover:bg-white/85 rounded-[70px] px-4 py-2'>
         Connect
       </button>
     </div>

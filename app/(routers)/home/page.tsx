@@ -15,7 +15,9 @@ export default async function Home() {
         card={cardWrapper}
         collectors={collectors}
       />
-      <div className=' w-screen h-screen rounded-top-3xl'>nama</div>
+      <div className='relative w-screen h-screen rounded-top-3xl z-20 '>
+        nama
+      </div>
     </div>
   );
 }
