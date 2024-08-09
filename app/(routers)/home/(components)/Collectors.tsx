@@ -10,7 +10,6 @@ export default function Collectors({
   const [slectedCollector, setSelectedCollector] =
     useState<CollectionItem | null>(null);
   const onC = (sele: any) => {
-    console.log('change');
     setSelectedCollector(sele);
   };
   return (
@@ -23,7 +22,7 @@ export default function Collectors({
                 slectedCollector &&
                 collector._id !== slectedCollector._id &&
                 'hidden'
-              } transition-[0.2s]`}
+              } transition-[1s]`}
               key={index}
               style={{
                 position: 'absolute',
@@ -56,7 +55,7 @@ export default function Collectors({
           !slectedCollector && 'hidden'
         }`}>
         <p className='text-[20px] font-bold'>{slectedCollector?.title}</p>
-        <p>{slectedCollector?.description}</p>
+        <p className='text-black/60'>{slectedCollector?.description}</p>
         <p className='text-[10px] mt-2 text-black/50'>
           {slectedCollector?.numberOfowner} owner
         </p>

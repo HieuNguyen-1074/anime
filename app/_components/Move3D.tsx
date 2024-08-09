@@ -17,9 +17,6 @@ const Move3D = ({
   children: React.ReactNode;
   className: string;
 }) => {
-  if (!window) {
-    return <></>;
-  }
   const ref = useRef<any>(null);
 
   const x = useMotionValue(0);

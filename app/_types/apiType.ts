@@ -18,6 +18,8 @@ type Category = {
   name: string;
   rank: number;
   image: string;
+  isMutil: Boolean;
+  isNew: Boolean;
 };
 
 type CollectionItem = {
