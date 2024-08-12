@@ -3,15 +3,17 @@ type Card = {
     $oid: string; // MongoDB ObjectId as a string
   };
   category: Category;
+  emblems: Emblem[];
   address: string; // Ethereum address
   categoryId: string; // Category ID
   name: string; // Name of the entity
   x: string; // X's URL
   image: string; // URL to an image
   isWrapper: boolean; // Boolean indicating if it's a wrapper
+  mainColor: string;
 };
 
-type Category = {
+type Emblem = {
   _id: {
     $oid: string;
   };
@@ -20,6 +22,13 @@ type Category = {
   image: string;
   isMutil: Boolean;
   isNew: Boolean;
+};
+
+type Category = {
+  _id: {
+    $oid: string;
+  };
+  name: string;
 };
 
 type CollectionItem = {

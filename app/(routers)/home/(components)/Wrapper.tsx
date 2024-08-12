@@ -48,19 +48,19 @@ export default function Wrapper({
           </p>
           <div className='flex items-center justify-start flex-wrap'>
             <div className='flex items-center mr-2'>
-              <div className='w-[35px] h-[35px] bg-black/60 rounded-full'>
+              <div className='size-[35px] bg-black/60 rounded-full'>
                 <Move3D className='w-full h-full rounded-full'>
                   <img
                     className='w-full h-full object-contain'
-                    src={card.category.image}
+                    src={card.emblems[0].image}
                     alt=''
                   />
                 </Move3D>
               </div>
               <div className=' ml-2'>
-                <p>{card.category.name}</p>
+                <p>{card.emblems[0].name}</p>
                 <p className='font-normal text-[12px] text-black/50'>
-                  Rank #{card.category.rank}
+                  Rank #{card.emblems[0].rank}
                 </p>
               </div>
             </div>

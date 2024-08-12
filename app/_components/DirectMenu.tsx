@@ -26,7 +26,7 @@ function MenuItem(props: any) {
             <svg
               xmlns='http://www.w3.org/2000/svg'
               viewBox='0 0 20 20'
-              fill='currentColor'
+              fill='#5d5e5f'
               aria-hidden='true'
               className='duration-200 w-[15px] h-[15px] opacity-40 rotate-180 group-hover:rotate-0'>
               <path
