@@ -1,4 +1,4 @@
-function lightOrDark(color: any) {
+export function lightOrDark(color: any) {
   let r, g, b, hsp;
   // Check the format of the color, HEX or RGB?
   if (color.match(/^rgb/)) {

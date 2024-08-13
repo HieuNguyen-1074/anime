@@ -8,6 +8,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog';
+import { lightOrDark } from '@/lib/checkColorType';
 export default function CardDetailPopup({
   children,
   card,
@@ -15,30 +16,35 @@ export default function CardDetailPopup({
   children: React.ReactNode;
   card: Card;
 }) {
+  const textColorOut =
+    lightOrDark(card.mainColor) === 'dark' ? 'white' : 'black';
   return (
     <>
       <Dialog>
-        <DialogTrigger asChild>{children}</DialogTrigger>
+        <DialogTrigger>{children}</DialogTrigger>
         <DialogContent
           style={{
             background: card.mainColor,
           }}
-          className={`sm:max-w-[625px] bg-[${card.mainColor}]`}>
-          <div className='flex items-start '>
-            <div>
+          className={`sm:max-w-[625px] bg-[${card.mainColor}]   color-[${textColorOut}] uppercase`}>
+          <div className='flex items-start gap-5'>
+            <div className='w-1/2'>
               <img
                 src={card.image}
                 alt={card.name}
               />
             </div>
-            <div>
+            <div className={`text-${textColorOut} w-1/2 flex flex-col gap-4`}>
               <p className='text-[16px]'>{card.category.name}</p>
               <p className='text-[20px]'>{card.name}</p>
-              <div className='flex justify-start items-center'>
+              <div
+                className={`flex justify-start items-center gap-2 py-3 border-t-[0.5px]  border-b-[0.5px] border-${textColorOut}`}>
                 {card.emblems.map((emblem: Emblem) => {
                   return (
-                    <div className=''>
+                    <div
+                      className={`size-[40px]  border-[1px] rounded-full border-${textColorOut}`}>
                       <img
+                        className='size-full object-contain'
                         src={emblem.image}
                         alt={emblem.name}
                       />
@@ -46,7 +52,7 @@ export default function CardDetailPopup({
                   );
                 })}
               </div>
-              <div className='flex  border-l-[2px] border-l-black/30 '>
+              <div className='flex '>
                 <svg
                   className='w-[40px] h-[30px]'
                   xmlns='http://www.w3.org/2000/svg'
@@ -62,8 +68,8 @@ export default function CardDetailPopup({
                 </svg>
                 <div>
                   <p>address</p>
-                  <p className='font-normal text-[12px] text-black/50'>
-                    {card.address.slice(0, 10)} ....{' '}
+                  <p className='font-normal text-[12px] '>
+                    {card.address.slice(0, 10)} ....
                     {card.address.slice(30, card.address.length)}
                   </p>
                 </div>

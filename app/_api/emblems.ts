@@ -8,6 +8,13 @@ function getEmblems() {
     .catch((error: any) => console.log(error));
 }
 
+function getEmblemDetail(emblemId: string) {
+  return fetch(API_PATH + EMBLEMS + emblemId, { cache: 'no-store' })
+    .then((response: any) => response.json())
+    .catch((error: any) => console.log(error));
+}
+
 export const emblems_api = {
   getEmblems,
+  getEmblemDetail,
 };

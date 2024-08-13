@@ -7,8 +7,8 @@ import {
   useSpring,
 } from 'framer-motion';
 
-const ROTATION_RANGE = 50.5;
-const HALF_ROTATION_RANGE = 32.5 / 2;
+const ROTATION_RANGE = 200.5;
+const HALF_ROTATION_RANGE = 200.5 / 2;
 
 const Move3D = ({
   children,
