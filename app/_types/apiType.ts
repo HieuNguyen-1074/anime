@@ -1,7 +1,9 @@
 type Card = {
-  _id: {
-    $oid: string; // MongoDB ObjectId as a string
-  };
+  _id:
+    | {
+        $oid: string; // MongoDB ObjectId as a string
+      }
+    | string;
   category: Category;
   emblems: Emblem[];
   address: string; // Ethereum address

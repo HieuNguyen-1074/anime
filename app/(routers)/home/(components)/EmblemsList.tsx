@@ -7,7 +7,9 @@ import { Drawer, DrawerContent, DrawerTrigger } from '@/components/ui/drawer';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { emblems_api } from '@/app/_api/emblems';
-import { getEmblemDetail } from './EmblemPopupDetail';
+
+import rankIcon from '../../../_assets/_images/quality.png';
+import Image from 'next/image';
 
 export default function EmblemsList({ emblems }: { emblems: Emblem[] }) {
   const [emblem, setEmblem] = useState<Emblem | null>(null);
@@ -62,29 +64,31 @@ function EmblemPopup({
         direction='left'
         onOpenChange={(open: boolean) => !open && setEmblem(null)}
         open={Boolean(emblem)}>
-        <DrawerContent className=' fixed top-0   w-1/2 h-full bg-black rounded-r-3xl overflow-hidden outline-none mt-20'>
+        <DrawerContent className=' fixed top-0   w-1/2 h-full bg-[#363636] rounded-r-3xl overflow-hidden outline-none mt-20'>
           <div className='rounded-none mt-5 w-full h-full '>
             <div className='p-4 pb-0 '>
               <p className='text-[2rem] mb-5 text-white'>Emblems</p>
-              <div className='flex  flex-wrap gap-2 items-start  pb-10'>
-                {emblems.map((emblem: Emblem, index: number) => {
-                  return (
-                    <div
-                      key={emblem._id.$oid}
-                      onClick={() => setEmblem(emblem)}
-                      className={`size-[50px] p-[1px] rounded-full hover:bg-white/35 border-[2px]   `}>
-                      <motion.img
-                        whileHover={{ scale: 1.6 }}
-                        whileTap={{ scale: 0.7 }}
-                        src={emblem.image}
-                        alt={emblem.name}
-                      />
-                    </div>
-                  );
-                })}
-              </div>
+              <div className='flex items-start '>
+                <div className=' w-3/5 flex  flex-wrap gap-2 items-start  pb-10'>
+                  {emblems.map((emblem: Emblem, index: number) => {
+                    return (
+                      <div
+                        key={emblem._id.$oid}
+                        onClick={() => setEmblem(emblem)}
+                        className={`size-[50px] p-[1px] rounded-full hover:bg-white/35 border-[2px]   `}>
+                        <motion.img
+                          whileHover={{ scale: 1.6 }}
+                          whileTap={{ scale: 0.7 }}
+                          src={emblem.image}
+                          alt={emblem.name}
+                        />
+                      </div>
+                    );
+                  })}
+                </div>
 
-              <EmblemPopupDetail emblemId={emblem?._id.$oid} />
+                <EmblemPopupDetail emblem={emblem} />
+              </div>
             </div>
           </div>
         </DrawerContent>
@@ -93,35 +97,56 @@ function EmblemPopup({
   );
 }
 
-async function EmblemPopupDetail({
-  emblemId,
-}: {
-  emblemId: string | undefined;
-}) {
-  const [emblem, setEmblem] = useState<any>(null);
-  if (!emblemId) return <></>;
+function EmblemPopupDetail({ emblem }: { emblem: Emblem | null }) {
+  const [emblemDetail, setEmblemDetail] = useState<any>(null);
+  if (!emblem) return <></>;
   useEffect(() => {
     async function getEmblem() {
-      if (!emblemId) return;
-      const emblem = await emblems_api.getEmblemDetail(emblemId);
-      setEmblem(emblem);
+      if (!emblem || typeof emblem._id !== 'string') return;
+      const emblemRes = await emblems_api.getEmblemDetail(emblem._id);
+      console.log(emblemRes, emblem);
+      setEmblemDetail(emblemRes);
     }
     getEmblem();
-  }, [emblemId]);
+  }, [emblem]);
 
   return (
-    <div className='text-white'>
-      <p className='text-[2rem] mb-5 text-white'>Details</p>
-      <div className='mx-auto border-4 rounded-full w-1/4 '>
-        <Move3D className=' '>
-          <img
-            className='w-full h-full  '
-            src={emblem?.image}
-            alt=''
-          />
-        </Move3D>
+    <div className='text-white w-2/5 pr-10'>
+      <p className='text-[1.5rem] mb-5 text-white'>Details</p>
+      <div className='w-full flex items-center flex-col justify-center'>
+        <div className='mx-auto border-4 rounded-full w-fit flex justify-center '>
+          <Move3D className=' '>
+            <img
+              className='w-full h-full  '
+              src={emblem?.image}
+              alt=''
+            />
+          </Move3D>
+        </div>
+        <div className='w-full'>
+          <p className='text-[1.2rem] w-full text-center mt-10'>
+            {emblemDetail?.name}
+          </p>
+          <div className=' w-full  flex justify-between items-center mt-8 bg-[#919191] border-[1px] rounded-lg p-5'>
+            <Image
+              className='size-[40px] rounded-full bg-white'
+              src={rankIcon}
+              alt=''
+            />
+            <p>{emblemDetail?.rank}</p>
+          </div>
+          {emblemDetail?.categories.map((category: any) => (
+            <div className=' w-full  flex justify-between items-center mt-8 bg-[#919191] border-[1px] rounded-lg p-5'>
+              <Image
+                className='size-[40px] rounded-full bg-white'
+                src={rankIcon}
+                alt=''
+              />
+              <p>{emblemDetail?.rank}</p>
+            </div>
+          ))}
+        </div>
       </div>
-      <p>{emblem?.name}</p>
     </div>
   );
 }
