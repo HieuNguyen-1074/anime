@@ -1,6 +1,7 @@
+import React from 'react';
+
 import { cards_api } from '@/app/_api/card';
 import CardDetailPopup from '@/app/_components/CardDetailPopup';
-import React from 'react';
 
 export default async function HighLight() {
   const cardHighLight = await cards_api.getCardHighlight();

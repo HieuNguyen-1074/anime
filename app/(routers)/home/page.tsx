@@ -1,12 +1,22 @@
+import { useEffect } from 'react';
+
 import Image from 'next/image';
 import Wrapper from './(components)/Wrapper';
-import { useEffect } from 'react';
+
 import { cards_api } from '@/app/_api/card';
 import { collectors_api } from '@/app/_api/collection';
 import Emblems from './(components)/Emblems';
 import HighLight from './(components)/HighLight';
+import { categories_api } from '@/app/_api/categories';
+import CardList from './(components)/CardList';
 
-export default async function Home() {
+export default async function Home({
+  params,
+  searchParams,
+}: {
+  params: { slug: string };
+  searchParams?: { [key: string]: string | string[] | undefined };
+}) {
   const cardWrapper = await cards_api.getCardWrapper();
   const collectors = await collectors_api.getCollectors();
 
@@ -19,10 +29,12 @@ export default async function Home() {
       <div
         id='list-card'
         className=' w-full relative h-screen rounded-top-3xl z-20 bg-[rgb(36,36,36)] rounded-3xl  text-white p-10 uppercase'>
-        <div className='flex justify-between'>
+        <div className='flex justify-between border-b-[1px] border-white/20 pb-10'>
           <Emblems />
           <HighLight />
         </div>
+
+        <CardList />
       </div>
     </div>
   );
