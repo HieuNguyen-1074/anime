@@ -116,7 +116,6 @@ function EmblemPopupDetail({ emblem }: { emblem: Emblem | null }) {
     async function getEmblem() {
       if (!emblem || typeof emblem._id !== 'string') return;
       const emblemRes = await emblems_api.getEmblemDetail(emblem._id);
-      console.log(emblemRes, emblem);
       startTransition(() => setEmblemDetail(emblemRes));
     }
     if (emblem) {

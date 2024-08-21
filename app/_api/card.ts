@@ -29,7 +29,7 @@ function getCardsByCategory(
     .get(
       API_PATH +
         CARD_BY_CATEGORY +
-        (categoryId || 'ALL' + '/pageSize=' + pageSize + '&&pageNo=' + pageNo)
+        ((categoryId || 'ALL') + '?pageSize=' + pageSize + '&&pageNo=' + pageNo)
     )
     .then((response: AxiosResponse) => response.data)
     .catch((error: any) => console.log(error));

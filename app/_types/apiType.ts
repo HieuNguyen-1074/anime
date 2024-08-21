@@ -27,9 +27,8 @@ type Emblem = {
 };
 
 type Category = {
-  _id: {
-    $oid: string;
-  };
+  _id: string;
+
   name: string;
 };
 

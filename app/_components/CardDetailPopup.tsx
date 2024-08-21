@@ -18,6 +18,9 @@ export default function CardDetailPopup({
 }) {
   const textColorOut =
     lightOrDark(card.mainColor) === 'dark' ? 'white' : 'black';
+  if (!card) {
+    return <></>;
+  }
   return (
     <>
       <Dialog>
