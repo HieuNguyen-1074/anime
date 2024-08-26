@@ -25,7 +25,25 @@ type Emblem = {
   isMutil: Boolean;
   isNew: Boolean;
 };
+type Post = {
+  _id: string;
+  name: string;
+  content: string;
+  mediaLink: string;
+  shortDescription: string;
+  topicId: string;
+  releaseDate: string;
+  col: number;
+  mediaType: string;
+};
+type World = {
+  _id: string;
+  name: string;
 
+  image: string;
+
+  isNew: Boolean;
+};
 type Category = {
   _id: string;
 
