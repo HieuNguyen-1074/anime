@@ -78,18 +78,7 @@ export default function Introduce({ posts }: { posts: Post[] }) {
                 {post._id === 'menu' && !post?.mediaType ? (
                   <div></div>
                 ) : post?.mediaType.indexOf('video') !== -1 ? (
-                  <video
-                    className='w-full h-full object-cover'
-                    muted
-                    autoPlay
-                    loop={true}
-                    preload='true'>
-                    <source
-                      className='w-full h-full'
-                      src={post.mediaLink}
-                      type={post.mediaType}
-                    />
-                  </video>
+                  ''
                 ) : (
                   <img
                     className='w-full h-full object-cover'
