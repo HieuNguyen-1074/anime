@@ -49,6 +49,11 @@ type Category = {
 
   name: string;
 };
+type Topic = {
+  _id: string;
+  totalPost: number;
+  name: string;
+};
 
 type CollectionItem = {
   _id: string; // Unique identifier for the item

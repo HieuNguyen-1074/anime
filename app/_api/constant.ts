@@ -7,6 +7,7 @@ export const CARD_BY_CATEGORY = 'card/category/';
 export const COLLECTORS = 'collectors/';
 export const CATEGORY = 'categories/';
 export const POSTS = 'posts/';
+export const TOPICS = 'topics/';
 
 export const EMBLEMS = 'emblems/';
 

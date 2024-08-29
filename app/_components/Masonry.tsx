@@ -42,7 +42,7 @@ export default function Masonry({
   const ref = useRef<HTMLElement | null>(null);
   useEffect(() => {
     if (!ref?.current) return;
-    const calWidthInOneCol = ref.current.clientWidth / cols;
+    const calWidthInOneCol = screen.width / cols - gaps * 2;
 
     setWidthInOneCol(calWidthInOneCol);
   }, [ref?.current]);
