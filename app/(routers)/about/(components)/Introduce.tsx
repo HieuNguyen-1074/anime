@@ -4,17 +4,28 @@ import { calGridCols } from '@/lib/utils';
 import React, { useEffect, useRef, useState } from 'react';
 import shuffle from 'lodash.shuffle';
 import { stagger, animate } from 'framer-motion';
+import { useRouter } from 'next/navigation';
 
 export default function Introduce({
   posts,
   topics,
+  topicId,
+  postDetail,
 }: {
   posts: Post[];
   topics: Topic[];
+  topicId: string | undefined;
+  postDetail: Post | {};
 }) {
-  const [datas, setData] = useState<any>(posts);
+  const [data, setData] = useState<any>(posts);
   const [isHiddenName, setIsHiddenName] = useState<boolean>(true);
-  const postR = [...posts].reverse();
+
+  useEffect(() => {
+    shuffleChange(state);
+  }, [posts, topicId]);
+
+  const router = useRouter();
+
   const [state, setState] = useState(0);
   const hoverMainHandle = () => {
     if (state === 0) {
@@ -38,7 +49,7 @@ export default function Introduce({
     if (state === 1 || state === 3) {
       animate('.main', { transform: 'translate(0%, 0px)' }, { duration: 1 });
     }
-  }, [state]);
+  }, [state, data]);
 
   const shuffleChange = (state: number) => {
     setState(state);
@@ -50,7 +61,7 @@ export default function Introduce({
           _id: 'menu',
           col: 1,
         },
-        ...postR,
+        ...data.reverse(),
       ];
     } else {
       setIsHiddenName(true);
@@ -61,95 +72,38 @@ export default function Introduce({
   return (
     <div>
       <div
-        onClick={() => state === 0 && shuffleChange(1)}
         className={
-          (state === 2
-            ? 'h-[240px] w-screen overflow-y-scroll'
-            : 'overflow-x-hidden') +
-          ' hidden-scroll-bar ' +
+          (state === 2 ? 'h-[240px] w-screen ' : 'overflow-x-hidden') +
+          ' hidden-scroll-bar relative ' +
           ((state === 0 || state === 2) && 'overflow-y-hidden ')
         }>
         <Masonry
           className={`relative w-screen  h-screen main hover:translate-x-10 pt-20`}
           cols={6}
           gaps={10}
+          onClick={() => state === 0 && shuffleChange(1)}
           onHover={hoverMainHandle}
           onLeave={mouseLeaveMainHandle}
-          data={datas}
+          data={data}
           height={state === 2 ? 150 : 300}
           isInOneLine={state === 2}
           isOdd={state === 0}
           childClass='post'
           keyId='_id'>
-          {datas.map((post: any, index: number) => {
+          {data.map((post: any, index: number) => {
             return (
-              <div
-                key={post._id}
-                className={
-                  post._id +
-                  (state === 2 ? ' h-[150px]' : ' h-[300px] ') +
-                  '  post text-white absolute    hover:scale-95 cursor-pointer '
-                }>
-                <div className='post-bound w-full h-full overflow-hidden rounded-2xl'>
-                  {post._id === 'menu' && !post?.mediaType ? (
-                    <div className='px-2 flex flex-col justify-center items-center h-full '>
-                      <div className='w-[80%]'>
-                        {topics.map((topic: Topic) => {
-                          return (
-                            <div className='flex justify-between items-center bg-[#59595933] px-7 py-[10px] w-full rounded-full mb-[4px] uppercase'>
-                              <p>{topic.name}</p>
-                              <p>{topic.totalPost}</p>
-                            </div>
-                          );
-                        })}
-                      </div>
-                      <div className='flex justify-between items-center gap-2 w-[80%]'>
-                        <button
-                          onClick={() => setIsHiddenName(!isHiddenName)}
-                          className='bg-[#59595933] px-5 py-[10px] rounded-full'
-                          type='button'>
-                          Aa
-                        </button>
-                        <button
-                          onClick={() => shuffleChange(0)}
-                          className='flex-1 bg-[#000000] px-5 py-[10px] rounded-full uppercase '
-                          type='button'>
-                          back
-                        </button>
-                      </div>
-                    </div>
-                  ) : post?.mediaType.indexOf('video') !== -1 ? (
-                    <video
-                      onClick={() => state === 1 && shuffleChange(2)}
-                      className='w-full h-full object-cover'
-                      muted
-                      autoPlay
-                      loop={true}
-                      preload='true'>
-                      <source
-                        className='w-full h-full'
-                        src={post.mediaLink}
-                        type={post.mediaType}
-                      />
-                    </video>
-                  ) : (
-                    <img
-                      onClick={() => state === 1 && shuffleChange(2)}
-                      className='w-full h-full object-cover'
-                      src={post.mediaLink}
-                      alt=''
-                    />
-                  )}
-                  {post?.name && !isHiddenName && (
-                    <p className='absolute bottom-0 bg-black p-3 mb-3 m-x-auto'>
-                      {post.name}
-                    </p>
-                  )}
-                </div>
-              </div>
+          
             );
           })}
         </Masonry>
+        {state === 2 && (
+          <p
+            className='absolute w-[100px] bg-black top-1/2 -translate-y-1/2 cursor-pointer
+          -left-[50px] pt-[40px] h-[100px] rounded-r-[3rem] text-white text-right uppercase pr-5 hover:left-0 hover:text-center transition-all  '
+            onClick={() => shuffleChange(1)}>
+            back
+          </p>
+        )}
       </div>
     </div>
   );

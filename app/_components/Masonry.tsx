@@ -22,6 +22,7 @@ export default function Masonry({
   isInOneLine,
   onHover,
   onLeave,
+  onClick,
 }: {
   children: React.ReactNode;
   cols: number;
@@ -35,6 +36,7 @@ export default function Masonry({
   isInOneLine: boolean;
   onHover: (() => void) | undefined | null;
   onLeave: (() => void) | undefined | null;
+  onClick: (() => void) | undefined | null;
 }) {
   const [state, setState] = useState(0);
   const [widthInOneCol, setWidthInOneCol] = useState<number>(0);
@@ -76,6 +78,7 @@ export default function Masonry({
   return (
     <div
       ref={ref}
+      onClick={onClick || function () {}}
       onMouseMove={onHover || function () {}}
       onMouseLeave={onLeave || function () {}}
       className={className}>
