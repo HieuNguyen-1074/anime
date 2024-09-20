@@ -6,7 +6,7 @@ import { stagger, animate } from 'framer-motion';
 import { useRouter, useSearchParams } from 'next/navigation';
 
 import Masonry from '@/app/_components/Masonry';
-import TopicMenu from './TopicMenu';
+import TopicMenu from '@/app/(routers)/about/(components)/topicMenu';
 import PostItem from './PostItem';
 import { posts_api } from '@/app/_api/posts';
 import PostDetail from './PostDetail';
