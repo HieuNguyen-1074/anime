@@ -4,6 +4,7 @@ import React, { useEffect } from 'react';
 import Collectors from './Collectors';
 import Move3D from '@/app/_components/Move3D';
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 
 export default function Wrapper({
   card,
@@ -13,22 +14,31 @@ export default function Wrapper({
   card: Card;
   collectors: CollectionItem[];
 }) {
+  const pathname = usePathname();
+
   if (!collectors) {
     return <div>Loading...</div>; // Handle undefined data case
   }
+
   useEffect(() => {
+    if (pathname !== '/home') {
+      return;
+    }
     window.onscroll = function () {
-      if (window.scrollY < 10) {
-        document.getElementsByTagName('body')[0].classList.remove('scrolled');
+      console.log(pathname);
+      if (window.scrollY > 10 && pathname === '/home') {
+        document.getElementsByTagName('body')[0].classList.add('header-white');
       } else {
-        document.getElementsByTagName('body')[0].classList.add('scrolled');
+        document
+          .getElementsByTagName('body')[0]
+          .classList.remove('header-white');
       }
     };
 
     return () => {
       document.removeEventListener('scroll', () => {});
     };
-  }, []);
+  }, [pathname]);
 
   const handleCopyLinkX = function () {
     navigator.clipboard.writeText(card.x);

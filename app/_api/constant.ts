@@ -6,5 +6,12 @@ export const CARD_BY_CATEGORY = 'card/category/';
 
 export const COLLECTORS = 'collectors/';
 export const CATEGORY = 'categories/';
+export const POSTS = 'posts/';
+export const TOPICS = 'topics/';
+
+export const BEANZ = 'beanz/';
+export const BEANZ_POST = 'beanz/posts/';
 
 export const EMBLEMS = 'emblems/';
+
+export const WORLDS = 'worlds/';

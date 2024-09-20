@@ -1,11 +1,16 @@
+import brow from '@/app/_assets/_images/beanz/image.jpg';
+import mind from '@/app/_assets/_images/beanz/image20.jpg';
+import beanz from '@/app/_assets/_images/beanz/image2.jpg';
+import line from '@/app/_assets/_images/beanz/image9.jpg';
+import nft from '@/app/_assets/_images/beanz/image3.jpg';
 export const menuItems = [
   {
     'title': 'ABOUT',
-    'link': 'https://example.com/the-waiting-man',
+    'link': '/about',
   },
   {
     'title': 'BEANZ',
-    'link': 'https://example.com/the-waiting-man',
+    'link': '/beanz',
   },
 
   {
@@ -24,7 +29,7 @@ export const menuItems = [
       },
       {
         'categoryName': 'WORLD',
-        'viewAll': 'https://example.com/world/view-all',
+        'viewAll': '/worlds',
         'items': [
           {
             'title': 'SISTERS',
