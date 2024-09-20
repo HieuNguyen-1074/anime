@@ -1,7 +1,6 @@
 'use client';
 
 import React, { useEffect, useRef, useState, useTransition } from 'react';
-import tally from '@/app/_assets/_medias/Tally.mp3';
 import humanListener from '@/app/_assets/_images/beanz/image17.jpg';
 import Image from 'next/image';
 
@@ -50,7 +49,9 @@ export default function Music() {
         alt=''
       />
       <audio
-        src={tally}
+        src={
+          'https://firebasestorage.googleapis.com/v0/b/anime-3b6ad.appspot.com/o/Tally.mp3?alt=media&token=98d0e284-d688-4ddc-82be-27d5f9c9c5ab'
+        }
         ref={tallyRef}></audio>
       <div className='w-[30px] h-[20px]  flex  justify-center items-end ml-[90px] mr-10'>
         <motion.div
