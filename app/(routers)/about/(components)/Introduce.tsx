@@ -1,110 +1,228 @@
 'use client';
-import Masonry from '@/app/_components/Masonry';
-import { calGridCols } from '@/lib/utils';
-import React, { useEffect, useRef, useState } from 'react';
-import shuffle from 'lodash.shuffle';
+
+import { calGridCols, getTranslateX } from '@/lib/utils';
+import React, { Suspense, useEffect, useRef, useState } from 'react';
 import { stagger, animate } from 'framer-motion';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
+
+import Masonry from '@/app/_components/Masonry';
+import TopicMenu from './TopicMenu';
+import PostItem from './PostItem';
+import { posts_api } from '@/app/_api/posts';
+import PostDetail from './PostDetail';
+import { STATUS_ABOUT_PAGE } from '@/app/_assets/constants';
+import Loading from './Loading';
 
 export default function Introduce({
   posts,
   topics,
-  topicId,
-  postDetail,
-}: {
+}: // topicId,
+// postDetail,
+{
   posts: Post[];
   topics: Topic[];
-  topicId: string | undefined;
-  postDetail: Post | {};
+  // postDetail: Post | undefined;
 }) {
-  const [data, setData] = useState<any>(posts);
   const [isHiddenName, setIsHiddenName] = useState<boolean>(true);
+  const searchs = useSearchParams();
+  const [postId, setPostId] = useState<string | null>(null);
+  const [topicId, setTopicId] = useState<string | null>(null);
+  const [action, setAction] = useState<string | null>(STATUS_ABOUT_PAGE.INIT);
+  const [data, setData] = useState<any>([...posts]);
+  const [isSuff, setIsSuff] = useState<boolean>(false);
 
-  useEffect(() => {
-    shuffleChange(state);
-  }, [posts, topicId]);
+  const mainRef = useRef<HTMLDivElement>(null);
 
   const router = useRouter();
+  useEffect(() => {
+    if (action !== STATUS_ABOUT_PAGE.LIST) {
+      setIsHiddenName(true);
+    }
 
-  const [state, setState] = useState(0);
+    const dataNew = isSuff ? [...posts].reverse() : posts;
+    console.log(isSuff, posts, dataNew);
+    const data = [
+      ...(action === STATUS_ABOUT_PAGE.LIST
+        ? [
+            {
+              _id: 'menu',
+              col: 1,
+            },
+          ]
+        : []),
+      ...dataNew,
+    ];
+    setData(data);
+  }, [action, isSuff]);
+
   const hoverMainHandle = () => {
-    if (state === 0) {
-      animate('.main', { transform: 'translate(48%, 0px)' }, { duration: 0.3 });
-      animate('.post-bound', { transform: 'scale(0.95)' }, { duration: 0.3 });
+    if (action === STATUS_ABOUT_PAGE.INIT && data.length > 0) {
+      animate('.post-bound', { transform: 'scale(0.98)' }, { duration: 0.3 });
     }
   };
 
   const mouseLeaveMainHandle = () => {
-    if (state === 0) {
-      animate('.main', { transform: 'translate(50%, 0px)' }, { duration: 0.3 });
+    if (action === STATUS_ABOUT_PAGE.INIT && data.length > 0) {
       animate('.post-bound', { transform: 'scale(1)' }, { duration: 0.3 });
     }
   };
   useEffect(() => {
+    if (data.filter((da: any) => da._id !== 'menu').length === 0) return;
     animate('.post-bound', { transform: 'scale(1)' }, { duration: 0.3 });
-    if (state === 0) {
-      animate('.main', { transform: 'translate(50%, 0px)' }, { duration: 1 });
+    if (action === STATUS_ABOUT_PAGE.INIT) {
+      animate('.main', { transform: 'translate(45%, 0)' }, { duration: 1 });
     }
 
-    if (state === 1 || state === 3) {
+    if (
+      action === STATUS_ABOUT_PAGE.LIST ||
+      action === STATUS_ABOUT_PAGE.DETAIL
+    ) {
       animate('.main', { transform: 'translate(0%, 0px)' }, { duration: 1 });
     }
-  }, [state, data]);
+  }, [action, data]);
+  useEffect(() => {
+    if (!postId) return;
 
-  const shuffleChange = (state: number) => {
-    setState(state);
-    let data: any = posts;
+    try {
+      const transformX = postId && getTranslateX(postId);
 
-    if (state === 1) {
-      data = [
-        {
-          _id: 'menu',
-          col: 1,
-        },
-        ...data.reverse(),
-      ];
-    } else {
-      setIsHiddenName(true);
-    }
-    setData(data);
-  };
+      if (transformX && mainRef?.current) {
+        scrollListTo(transformX - window.outerWidth / 5, false);
+      }
+    } catch (error) {}
+  }, [postId]);
+
+  function scrollListTo(left: number, isPlus: boolean) {
+    mainRef?.current?.scrollTo({
+      left: isPlus ? mainRef?.current?.scrollLeft + left : left,
+      behavior: 'smooth',
+    });
+  }
 
   return (
-    <div>
-      <div
-        className={
-          (state === 2 ? 'h-[240px] w-screen ' : 'overflow-x-hidden') +
-          ' hidden-scroll-bar relative ' +
-          ((state === 0 || state === 2) && 'overflow-y-hidden ')
-        }>
-        <Masonry
-          className={`relative w-screen  h-screen main hover:translate-x-10 pt-20`}
-          cols={6}
-          gaps={10}
-          onClick={() => state === 0 && shuffleChange(1)}
-          onHover={hoverMainHandle}
-          onLeave={mouseLeaveMainHandle}
-          data={data}
-          height={state === 2 ? 150 : 300}
-          isInOneLine={state === 2}
-          isOdd={state === 0}
-          childClass='post'
-          keyId='_id'>
-          {data.map((post: any, index: number) => {
-            return (
-          
-            );
-          })}
-        </Masonry>
-        {state === 2 && (
-          <p
-            className='absolute w-[100px] bg-black top-1/2 -translate-y-1/2 cursor-pointer
-          -left-[50px] pt-[40px] h-[100px] rounded-r-[3rem] text-white text-right uppercase pr-5 hover:left-0 hover:text-center transition-all  '
-            onClick={() => shuffleChange(1)}>
-            back
+    <>
+      <Loading />
+      <div className='overflow-x-hidden'>
+        <div
+          className={` transition-opacity duration-1000 absolute text-white bottom-28 ml-6 w-1/3 z-10 ${
+            action !== STATUS_ABOUT_PAGE.INIT &&
+            'opacity-0 pointer-events-none '
+          } `}>
+          <h2 className='text-[4rem]'>WHO WE ARE</h2>
+          <p>
+            At Azuki, we are building the future of anime through decentralized
+            IP co-created with the community and innovative products that enrich
+            the anime fan experience. Our Azuki collectibles have generated over
+            $1B in secondary trading volume. Here are some things we’ve created
+            so far.
           </p>
-        )}
+          <button
+            onClick={() => setAction(STATUS_ABOUT_PAGE.LIST)}
+            className='text-[1.5rem] mt-9 cursor-pointer bg-white/10 px-10 py-3 rounded-2xl hover:bg-white/30'>
+            Explode now -&gt;
+          </button>
+        </div>
+        <div
+          ref={mainRef}
+          className={
+            'main w-screen m-auto  group flex justify-center ' +
+            (action === STATUS_ABOUT_PAGE.DETAIL
+              ? 'h-[180px] w-screen  '
+              : ' h-screen') +
+            ' hidden-scroll-bar relative ' +
+            ((action === STATUS_ABOUT_PAGE.INIT ||
+              action === STATUS_ABOUT_PAGE.DETAIL) &&
+              'overflow-y-hidden  ')
+          }
+          onMouseMove={hoverMainHandle}
+          onMouseLeave={mouseLeaveMainHandle}>
+          <Masonry
+            className={`relative   h-full transition-all  w-[90%] ${
+              action !== STATUS_ABOUT_PAGE.INIT
+                ? 'pt-20  '
+                : 'group-hover:translate-x-10'
+            } ${action === STATUS_ABOUT_PAGE.DETAIL && 'h-[180px]'}`}
+            cols={6}
+            gaps={5}
+            onClick={() =>
+              action === STATUS_ABOUT_PAGE.INIT &&
+              (setIsSuff(true), setAction(STATUS_ABOUT_PAGE.LIST))
+            }
+            data={data}
+            height={action === STATUS_ABOUT_PAGE.DETAIL ? 100 : 250}
+            isInOneLine={action === STATUS_ABOUT_PAGE.DETAIL}
+            isOdd={action === STATUS_ABOUT_PAGE.INIT}
+            childClass='post'
+            showKey={'topicId'}
+            showVal={topicId}
+            keyId='_id'>
+            {data.map((post: any, index: number) => {
+              return post._id === 'menu' && !post?.mediaType ? (
+                <TopicMenu
+                  isHiddenName={isHiddenName}
+                  setIsHiddenName={setIsHiddenName}
+                  topics={topics}
+                  key={post._id}
+                  setAction={setAction}
+                  isSuff={isSuff}
+                  setIsSuff={setIsSuff}
+                  setTopicId={setTopicId}
+                  topicId={topicId}
+                />
+              ) : (
+                <PostItem
+                  isHiddenName={isHiddenName}
+                  post={post}
+                  setPostId={setPostId}
+                  postId={postId}
+                  state={action}
+                  postDetail={undefined}
+                  key={post._id}
+                  setAction={setAction}
+                />
+              );
+            })}
+          </Masonry>
+        </div>
+        <div
+          className={`${
+            action !== STATUS_ABOUT_PAGE.DETAIL && 'hidden'
+          } flex justify-start items-center text-white gap-2 w-fit bg-white/15 px-2 py-[6px] rounded-3xl ml-10 relative z-10`}>
+          <div className='bg-[#000000] px-2 py-[5px]  rounded-xl uppercase text-[1.5rem]'>
+            <button
+              onClick={() => {
+                scrollListTo(-(window.outerWidth / 5), true);
+              }}
+              className=' bg-white/30 px-4 rounded-xl  mr-2'
+              type='button'>
+              &lt;
+            </button>
+            <button
+              onClick={() => {
+                scrollListTo(window.outerWidth / 5, true);
+              }}
+              className=' bg-white/30 px-4 rounded-xl '
+              type='button'>
+              &gt;
+            </button>
+          </div>
+          <button
+            onClick={() => {
+              setPostId(null);
+              setIsSuff(true);
+              setAction(STATUS_ABOUT_PAGE.LIST);
+              setTopicId(null);
+            }}
+            className=' bg-[#000000] px-5 py-[10px] w-fit rounded-xl uppercase '
+            type='button'>
+            back
+          </button>
+        </div>
+        <div
+          className={`${action !== STATUS_ABOUT_PAGE.DETAIL && 'hidden'} mt-4`}>
+          <PostDetail postId={postId} />
+        </div>
       </div>
-    </div>
+    </>
   );
 }

@@ -62,3 +62,14 @@ type CollectionItem = {
   numberOfowner: number; // Number of owners
   title: string; // Title of the item
 };
+
+type Beanz = {
+  _id: string;
+  name: string;
+  description: string;
+  traits: string;
+  color: string;
+  icon: string;
+  avatar: string;
+  position: string;
+};

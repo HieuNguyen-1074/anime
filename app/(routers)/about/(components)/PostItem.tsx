@@ -1,57 +1,53 @@
-import React from 'react';
+import { STATUS_ABOUT_PAGE } from '@/app/_assets/constants';
+import { useParams, useRouter, useSearchParams } from 'next/navigation';
+import React, { Dispatch } from 'react';
 
-export default function PostItem() {
+export default function PostItem({
+  post,
+  state,
+  isHiddenName,
+  postId,
+  setPostId,
+  setAction,
+}: {
+  post: Post;
+  state: string | null;
+  isHiddenName: boolean;
+  postDetail: Post | undefined;
+  postId: string | null;
+  setPostId: Dispatch<string | null>;
+  setAction: Dispatch<string | null>;
+}) {
+  const onSelectPost = (id: string) => {
+    if (state === STATUS_ABOUT_PAGE.INIT) return;
+    if (state === STATUS_ABOUT_PAGE.DETAIL) {
+      setPostId(id);
+    } else {
+      setAction(STATUS_ABOUT_PAGE.DETAIL);
+      setTimeout(() => {
+        setPostId(id);
+      }, 1500);
+    }
+  };
   return (
     <div
-      key={post._id}
       className={
         post._id +
-        (state === 2 ? ' h-[150px]' : ' h-[300px] ') +
-        '  post text-white absolute    hover:scale-95 cursor-pointer ' +
-        (postDetail?._id === post._id && ' opacity-50 ')
+        '' +
+        (postId === post._id &&
+          ' border-4 border-white rounded-2xl  scale-95') +
+        (state === STATUS_ABOUT_PAGE.DETAIL ? ' h-[100px]' : ' h-[250px] ') +
+        '  post text-white absolute opacity-0 hover:scale-95 cursor-pointer '
       }>
-      <div className='post-bound w-full h-full overflow-hidden rounded-2xl'>
-        {post._id === 'menu' && !post?.mediaType ? (
-          <div className='px-2 flex flex-col justify-center items-center h-full '>
-            <div className='w-[80%]'>
-              {topics.map((topic: Topic) => {
-                return (
-                  <div
-                    onClick={() =>
-                      router.push('/about/' + '?topicId=' + topic._id)
-                    }
-                    className={
-                      'group flex justify-between items-center bg-[#59595933] px-7 py-[10px] w-full rounded-full mb-[4px] uppercase ' +
-                      (topicId === topic._id && 'bg-red-400')
-                    }>
-                    <p>{topic.name}</p>
-                    <p>{topic.totalPost}</p>
-                  </div>
-                );
-              })}
-            </div>
-            <div className='flex justify-between items-center gap-2 w-[80%]'>
-              <button
-                onClick={() => setIsHiddenName(!isHiddenName)}
-                className='bg-[#59595933] px-5 py-[10px] rounded-full'
-                type='button'>
-                Aa
-              </button>
-              <button
-                onClick={() => {
-                  router.push('/about/?topicId=all');
-                  shuffleChange(0);
-                }}
-                className='flex-1 bg-[#000000] px-5 py-[10px] rounded-full uppercase '
-                type='button'>
-                back
-              </button>
-            </div>
-          </div>
-        ) : post?.mediaType.indexOf('video') !== -1 ? (
+      <div
+        className='post-bound w-full h-full overflow-hidden rounded-2xl'
+        onClick={() => onSelectPost(post._id)}>
+        {post?.mediaType.indexOf('video') !== -1 ? (
           <video
-            onClick={() => state === 1 && shuffleChange(2)}
-            className='w-full h-full object-cover transition-all'
+            className={
+              'w-full h-full object-cover transition-all' +
+              (postId === post._id && ' transition-all scale-50')
+            }
             muted
             autoPlay
             loop={true}
@@ -64,8 +60,10 @@ export default function PostItem() {
           </video>
         ) : (
           <img
-            onClick={() => state === 1 && shuffleChange(2)}
-            className='w-full h-full object-cover  transition-all'
+            className={
+              'w-full h-full object-cover  transition-all' +
+              (postId === post._id && ' transition-all scale-75')
+            }
             src={post.mediaLink}
             alt=''
           />

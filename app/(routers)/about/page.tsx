@@ -8,19 +8,18 @@ export default async function AboutPage({
   searchParams,
 }: {
   params: { slug: string };
-  searchParams?: { [topicId: string]: string | undefined };
+  searchParams?: { [postId: string]: string | undefined };
 }) {
-  const posts = await posts_api.getPosts(searchParams?.topicId ?? 'all');
+  const posts = await posts_api.getPosts('all');
   const topics = await topics_api.getTopics();
-  const postDetail = {};
 
   return (
     <div className=''>
       <Introduce
-        topicId={searchParams?.topicId}
+        // topicId={searchParams?.topicId}
         posts={posts}
         topics={topics}
-        postDetail={postDetail}
+        // postDetail={postDetail}
       />
     </div>
   );

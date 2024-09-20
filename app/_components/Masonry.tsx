@@ -20,8 +20,9 @@ export default function Masonry({
   childClass,
   gaps,
   isInOneLine,
-  onHover,
-  onLeave,
+  showKey,
+  showVal,
+
   onClick,
 }: {
   children: React.ReactNode;
@@ -34,44 +35,57 @@ export default function Masonry({
   childClass: string;
   gaps: number;
   isInOneLine: boolean;
-  onHover: (() => void) | undefined | null;
-  onLeave: (() => void) | undefined | null;
+  showKey: string | null;
+  showVal: string | null;
+
   onClick: (() => void) | undefined | null;
 }) {
   const [state, setState] = useState(0);
   const [widthInOneCol, setWidthInOneCol] = useState<number>(0);
 
-  const ref = useRef<HTMLElement | null>(null);
+  const ref = useRef<HTMLDivElement | null>(null);
   useEffect(() => {
     if (!ref?.current) return;
-    const calWidthInOneCol = screen.width / cols - gaps * 2;
+    const calWidthInOneCol = ref.current.offsetWidth / cols - gaps * 2;
 
     setWidthInOneCol(calWidthInOneCol);
   }, [ref?.current]);
   useEffect(() => {
     if (!ref.current) return;
-
-    data.forEach((va: any, index: number) => {
+    const dataFilter = data.filter((va: any) =>
+      showVal && showKey && va[showKey] ? va[showKey] === showVal : true
+    );
+    let width = isInOneLine ? height : widthInOneCol;
+    data.forEach((val: any, index: number) => {
+      let isHidden: boolean = false;
+      if (showKey && showVal && val[showKey] && val[showKey] !== showVal) {
+        isHidden = true;
+      }
+      if (isInOneLine && val) {
+        val.col = 1;
+      }
+      console.log(isHidden);
       animate(
         document.getElementsByClassName(childClass)[index],
         {
           transform: calTransform(
-            va,
-            calGridCols(data, cols, keyId, isInOneLine),
+            val,
+            calGridCols(isHidden ? data : dataFilter, cols, keyId, isInOneLine),
             isOdd,
-            widthInOneCol,
+            width,
             height,
             keyId,
             gaps
           ),
-          width:
-            (va.col || 1) * (widthInOneCol || 1) + (va.col - 1) * gaps + 'px',
+          width: (val.col || 1) * (width || 1) + (val.col - 1) * gaps + 'px',
+          opacity: isHidden ? '0' : '1',
+          zIndex: isHidden ? '-1' : '1',
         },
         { duration: 1 }
       );
     });
     return function () {};
-  }, [data, widthInOneCol, ref.current, isInOneLine, isOdd]);
+  }, [data, widthInOneCol, ref.current, isInOneLine, isOdd, showVal]);
 
   // Hook1: Tie media queries to the number of columns
 
@@ -79,8 +93,6 @@ export default function Masonry({
     <div
       ref={ref}
       onClick={onClick || function () {}}
-      onMouseMove={onHover || function () {}}
-      onMouseLeave={onLeave || function () {}}
       className={className}>
       {children}
     </div>
@@ -96,7 +108,6 @@ function calTransform(
   keyId: string,
   gaps: number
 ) {
-  console.log('data', data, grid);
   const se = grid.reduce((transform: any, val: any, index1: any) => {
     let colBefore = 0;
     val.forEach((value: any, index2: number) => {

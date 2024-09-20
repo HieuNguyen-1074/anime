@@ -74,6 +74,7 @@ const config = {
           from: { height: 'var(--radix-accordion-content-height)' },
           to: { height: '0' },
         },
+
         'move': {
           '0%': {
             backgroundPosition: '100% 50%',

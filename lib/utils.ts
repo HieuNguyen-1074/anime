@@ -11,7 +11,6 @@ export function calGridCols(
   key: string,
   isInOneLine: boolean
 ) {
-  console.log(isInOneLine);
   let row = 1;
   const d = data.reduce((grid: any, d: any, index: number) => {
     if (!isInOneLine) {
@@ -55,4 +54,12 @@ export function shuffle(array: any) {
     ];
   }
   return array;
+}
+
+export function getTranslateX(className: string) {
+  console.log(document);
+  var element = document.getElementsByClassName(`${className}`);
+  var style = element && window.getComputedStyle(element[0]);
+  var matrix = style && new WebKitCSSMatrix(style.transform);
+  return matrix?.m41;
 }
