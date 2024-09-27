@@ -4,10 +4,12 @@ import { cards_api } from '@/app/_api/card';
 import CardDetailPopup from '@/app/_components/CardDetailPopup';
 
 export default async function HighLight() {
+  //Call data
   const cardHighLight = await cards_api.getCardHighlight();
+
   return (
-    <div className='w-[600px]'>
-      <div className='flex justify-between text-[1.2rem]'>
+    <div className=' w-full md:w-[600px] mt-10 md:mt-0'>
+      <div className='flex justify-between lg:text-[1.2em]  text-[1rem]'>
         <p>HighLight</p>
         <a
           href='#list-card'

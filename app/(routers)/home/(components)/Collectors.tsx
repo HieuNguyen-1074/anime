@@ -1,5 +1,6 @@
 'use client';
 
+import useScreen from '@/app/hooks/useScreen';
 import React, { useState } from 'react';
 
 export default function Collectors({
@@ -9,7 +10,10 @@ export default function Collectors({
 }) {
   const [slectedCollector, setSelectedCollector] =
     useState<CollectionItem | null>(null);
-  const onC = (sele: any) => {
+  const { md } = useScreen();
+
+  // handle event
+  const handleSelectCollector = (sele: any) => {
     setSelectedCollector(sele);
   };
   return (
@@ -30,12 +34,12 @@ export default function Collectors({
                   left: `${
                     slectedCollector?._id === collector._id || index === 0
                       ? '0'
-                      : index * 25
+                      : index * (md ? 70 : 25)
                   }px`,
                   zIndex: collectors.length - index,
                 }}>
                 <img
-                  onClick={() => onC(collector)}
+                  onClick={() => handleSelectCollector(collector)}
                   className={!slectedCollector ? `hover:-translate-y-1` : ''}
                   src={collector.image}
                   alt=''
@@ -52,11 +56,11 @@ export default function Collectors({
           })}
       </div>
       <div
-        className={`w-[300px] ml-16 -mt-3 z-[2] ${
+        className={`w-[300px] ml-20 -mt-3 z-[2] ${
           !slectedCollector && 'hidden'
         }`}>
         <p className='text-[20px] font-bold'>{slectedCollector?.title}</p>
-        <p className='text-black/60'>{slectedCollector?.description}</p>
+        <p className='text-black/60 '>{slectedCollector?.description}</p>
         <p className='text-[10px] mt-2 text-black/50'>
           {slectedCollector?.numberOfowner} owner
         </p>

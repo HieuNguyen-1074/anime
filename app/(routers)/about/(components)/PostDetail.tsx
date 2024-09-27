@@ -67,7 +67,7 @@ function PostDetail({ postId }: { postId: string | null }) {
     <>
       <div
         className={
-          'post-detail grid grid-cols-3 gap-12 text-white px-10  relative  -mt-20'
+          'post-detail grid  grid-cols-1 lg:grid-cols-3 gap-12 text-white px-10  relative  -mt-20'
         }>
         <div className='post-short relative mt-20'>
           <p className='text-[2rem] font-bold'>{post?.name}</p>
@@ -77,15 +77,15 @@ function PostDetail({ postId }: { postId: string | null }) {
 
         <div
           ref={detailRef}
-          className='post-content h-[77vh] overflow-y-scroll hidden-scroll-bar col-span-2 relative rounded-xl'>
+          className='post-content  lg:h-[77vh] overflow-y-scroll hidden-scroll-bar col-span-2 relative rounded-xl'>
           <motion.div
-            className={`progress-bar w-[${
+            className={`progress-bar hidden lg:block w-[${
               scaleX.get() * 100
             }%] col-span-3 h-[10px] bg-white sticky top-0 `}
             style={{ scaleX }}
           />
           <div
-            className='mt-[15px] p-4 bg-[#3d3b3b33] rounded-xl'
+            className=' mt-0 lg:mt-[15px] p-4 bg-[#3d3b3b33] rounded-xl'
             dangerouslySetInnerHTML={{ __html: post?.content || '' }}
           />
           <motion.div

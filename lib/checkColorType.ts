@@ -1,3 +1,10 @@
+/**
+ * @function lightOrDark
+ * @description Given a color, determine whether it is light or dark.
+ * @param {string} color - The color to determine, given as either a HEX or RGB string.
+ * @returns {string} Either `'light'` or `'dark'`, depending on the lightness of the color.
+ */
+
 export function lightOrDark(color: any) {
   let r, g, b, hsp;
   // Check the format of the color, HEX or RGB?

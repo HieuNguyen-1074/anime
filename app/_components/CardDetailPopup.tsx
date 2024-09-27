@@ -29,7 +29,7 @@ export default function CardDetailPopup({
           style={{
             background: card.mainColor,
           }}
-          className={`sm:max-w-[625px] bg-[${card.mainColor}]   color-[${textColorOut}] uppercase`}>
+          className={` max-w-full md:max-w-[600px]  bg-[${card.mainColor}]   color-[${textColorOut}] uppercase`}>
           <div className='flex items-start gap-5'>
             <div className='w-1/2'>
               <img

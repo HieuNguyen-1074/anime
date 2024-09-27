@@ -3,9 +3,11 @@ import { animate, motion } from 'framer-motion';
 export default function Loading() {
   const [counter, setCounter] = useState(0);
   const [counter2, setCounter2] = useState(0);
+
+  //effect
   useEffect(() => {
     let interval;
-    if (counter >= 10) {
+    if (counter >= 10 || counter2 > 10) {
       clearInterval(interval);
       return;
     }
@@ -27,8 +29,7 @@ export default function Loading() {
       setCounter2(0);
       setCounter(counter + 1);
 
-      if (counter + 1 < 10) {
-      } else {
+      if (counter + 1 + counter2 < 100) {
         setTimeout(() => {
           animate(
             '.loading',

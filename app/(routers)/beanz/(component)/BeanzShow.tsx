@@ -11,11 +11,9 @@ import { motion } from 'framer-motion';
 import ModalBeanz from './ModalBeanz';
 
 export default function BeanzShow({ beanzs }: { beanzs: Beanz[] }) {
-  const [isOpenDetail, setIsOpenDetail] = useState(false);
-  const [detail, setDetail] = useState<Beanz | null>(null);
   return (
     <div>
-      <div className='w-screen h-screen relative pt-20 flex justify-center '>
+      <div className='w-full h-screen relative pt-20 flex justify-center '>
         <motion.div
           animate={{
             transform: [
@@ -31,7 +29,7 @@ export default function BeanzShow({ beanzs }: { beanzs: Beanz[] }) {
             repeat: Infinity,
             repeatDelay: 1,
           }}
-          className='w-full mx-auto relative flex flex-col items-center'>
+          className='w-full mx-auto absolute bottom-40  flex flex-col items-center'>
           <Image
             className='w-[66vw] mt-32 z-[1] '
             src={logo}
@@ -48,7 +46,7 @@ export default function BeanzShow({ beanzs }: { beanzs: Beanz[] }) {
             alt='Ig logo'
           />
           <Image
-            className='w-[100px] rounded-[30px] absolute top-40 left-[85%] z-0 rotate-12 shadow-2xl hover:scale-110 transition-all'
+            className='w-[100px] rounded-[30px] absolute top:20 lg:top-40 left-[50%] lg:left-[85%] z-0 rotate-12 shadow-2xl hover:scale-110 transition-all'
             src={iconX}
             alt='X logo'
           />

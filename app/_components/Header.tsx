@@ -1,5 +1,6 @@
 import React from 'react';
 import DirectMenu from './DirectMenu';
+import { RiMenu4Fill } from 'react-icons/ri';
 
 export default function Header() {
   return (
@@ -10,7 +11,7 @@ export default function Header() {
         </h1>
       </a>
       <DirectMenu />
-      <button className='btn-connect flex items-center gap-2 hover:bg-white/85 rounded-[70px] px-4 py-2'>
+      <button className='btn-connect hidden sm:flex  items-center gap-2 hover:bg-white/85 rounded-[70px] px-4 py-2 '>
         Connect
       </button>
     </div>

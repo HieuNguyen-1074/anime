@@ -9,7 +9,7 @@ export default async function Emblems() {
 
   return (
     <div className=''>
-      <p className='text-[1.4rem] ml-2'>Emblems</p>
+      <p className='lg:text-[1.4rem] text-[1.2] ml-2 '>Emblems</p>
       <EmblemsList emblems={emblems} />
     </div>
   );

@@ -12,11 +12,9 @@ import ModalBeanz from './ModalBeanz';
 import { lightOrDark } from '@/lib/checkColorType';
 
 export default function BeanzList({ beanzs }: { beanzs: Beanz[] }) {
-  const [isOpenDetail, setIsOpenDetail] = useState(false);
-  const [detail, setDetail] = useState<Beanz | null>(null);
   return (
     <div className='text-white'>
-      <div className='w-screen  relative pt-20  '>
+      <div className='w-full  relative   '>
         <div className='flex justify-center items-center flex-col'>
           <p className='text-[3rem] font-bold text-center'>Meet the Beanz</p>
           <p className='max-w-[50vh] text-center'>
@@ -26,7 +24,7 @@ export default function BeanzList({ beanzs }: { beanzs: Beanz[] }) {
           </p>
         </div>
 
-        <div className=' w-[95vw] grid grid-cols-5 gap-3  z-10  mx-auto center mt-20'>
+        <div className=' w-[95vw] grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-3  z-10  mx-auto center mt-20'>
           {beanzs.map((beanz: Beanz, index: number) => {
             return (
               <BeanzItem

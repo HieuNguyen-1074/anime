@@ -6,7 +6,7 @@ import { FOOTER } from '../_assets/constants';
 
 export default function Footer() {
   return (
-    <div className='flex bg-white gap-10 px-10  '>
+    <div className='flex bg-white gap-10 px-10  md:flex-row flex-col'>
       <div className='flex-1 flex justify-between p-6'>
         <p>Azuki</p>
         <Image

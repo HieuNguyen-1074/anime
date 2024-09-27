@@ -5,6 +5,7 @@ import Collectors from './Collectors';
 import Move3D from '@/app/_components/Move3D';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import { useMotionValueEvent, useScroll } from 'framer-motion';
 
 export default function Wrapper({
   card,
@@ -14,38 +15,59 @@ export default function Wrapper({
   card: Card;
   collectors: CollectionItem[];
 }) {
-  const pathname = usePathname();
-
   if (!collectors) {
     return <div>Loading...</div>; // Handle undefined data case
   }
+  const pathname = usePathname();
+  const pageRef = React.useRef<HTMLBodyElement>(
+    document.getElementsByTagName('body')[0]
+  );
+  const { scrollY, scrollYProgress } = useScroll({
+    container: pageRef,
+  });
+
+  useMotionValueEvent(scrollY, 'change', () => {
+    scrollCheck(pathname, scrollY);
+  });
 
   useEffect(() => {
-    if (pathname !== '/home') {
-      return;
-    }
-    window.onscroll = function () {
-      console.log(pathname);
-      if (window.scrollY > 10 && pathname === '/home') {
-        document.getElementsByTagName('body')[0].classList.add('header-white');
-      } else {
-        document
-          .getElementsByTagName('body')[0]
-          .classList.remove('header-white');
-      }
-    };
+    scrollCheck(pathname, scrollY);
+    return () => {};
+  }, []);
+  // effect
+  // useEffect(() => {
+  //   if (pathname !== '/home') {
+  //     return;
+  //   }
 
-    return () => {
-      document.removeEventListener('scroll', () => {});
-    };
-  }, [pathname]);
+  //   document.getElementsByTagName('body')[0].onscroll = function () {
+  //     console.log(pathname);
+  //     if (
+  //       document.getElementsByTagName('body')[0].scrollTop > 10 &&
+  //       pathname === '/home'
+  //     ) {
+  //       document.getElementsByTagName('body')[0].classList.add('header-white');
+  //     } else {
+  //       document
+  //         .getElementsByTagName('body')[0]
+  //         .classList.remove('header-white');
+  //     }
+  //   };
+
+  //   return () => {
+  //     document.removeEventListener('scroll', () => {});
+  //   };
+  // }, [pathname]);
 
   const handleCopyLinkX = function () {
     navigator.clipboard.writeText(card.x);
   };
   return (
-    <div className=' wrapper h-[75vh] w-full  overflow-hidden sticky top-0 z-[1] rounded-b-3xl '>
-      <div className='h-[100%] overflow-hidden  relative'>
+    <div
+      className={
+        ' wrapper h-[75vh] w-full  overflow-hidden sticky top-0 z-[1] rounded-b-3xl '
+      }>
+      <div className='h-[100%] overflow-hidden   relative'>
         <Collectors collectors={collectors} />
         <img
           className=' absolute top-0 left-0 object-cover duration-200 w-full h-full object-bottom z-[1]'
@@ -130,4 +152,12 @@ export default function Wrapper({
       </div>
     </div>
   );
+}
+
+function scrollCheck(pathname: any, scrollY: any) {
+  if (scrollY.get() > 0 && pathname === '/home') {
+    document.getElementsByTagName('body')[0].classList.add('header-white');
+  } else {
+    document.getElementsByTagName('body')[0].classList.remove('header-white');
+  }
 }

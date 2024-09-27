@@ -50,16 +50,18 @@ export default function TopicMenu({
             type='button'>
             Aa
           </button>
-          <div className='flex  justify-center relative rounded-2xl overflow-hidden h-[90%] mt-1'>
+          <div className='flex  justify-center relative rounded-2xl overflow-hidden h-[90%] w-[80px] mt-1'>
             <button
               className={
-                'bg-white/35 h-full w-[50px] transition-all rounded-2xl absolute top-0 left-0 ' +
+                'bg-white/35 h-full w-[40px] transition-all rounded-2xl absolute top-0 left-0 ' +
                 (isSuff ? 'translate-x-full' : '')
               }
               type='button'></button>
             <button
               onClick={() => setIsSuff(false)}
-              className='bg-[#00000033] px-5  w-[50px]'
+              className={`bg-[#00000033] px-5  ${
+                !isSuff ? 'w-[40px]' : 'w-[30px]'
+              }`}
               type='button'>
               <svg
                 width='17'
@@ -75,7 +77,9 @@ export default function TopicMenu({
             </button>
             <button
               onClick={() => setIsSuff(true)}
-              className='bg-[#00000033] px-5  w-[50px]'
+              className={`bg-[#00000033] px-5  ${
+                isSuff ? 'w-[40px]' : 'w-[30px]'
+              }`}
               type='button'>
               <svg
                 width='17'

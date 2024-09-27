@@ -17,7 +17,9 @@ export default async function AboutPage({
     <div className=''>
       <Introduce
         // topicId={searchParams?.topicId}
-        posts={posts}
+        posts={posts.filter(
+          (post: Post) => post.mediaType.indexOf('image') !== -1
+        )}
         topics={topics}
         // postDetail={postDetail}
       />

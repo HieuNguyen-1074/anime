@@ -8,8 +8,11 @@ import { headers } from 'next/headers';
 import Link from 'next/link';
 import React, { useEffect, useState } from 'react';
 import { Skeleton } from '@/components/ui/skeleton';
+import { useMotionValueEvent, useScroll } from 'framer-motion';
+import { usePathname } from 'next/navigation';
 
 export default function CardList() {
+  //state
   const [categoryId, setCategoryId] = useState<string | null>(null);
   const [categories, setCategories] = useState([]);
   const [cards, setCards] = useState<Card[]>([]);
@@ -17,6 +20,14 @@ export default function CardList() {
   const [pageSize, setPageSize] = useState(20);
   const [pageMax, setPageMax] = useState<null | number>(null);
   const [isLoading, setIsLoading] = useState(false);
+  const pageRef = React.useRef<HTMLBodyElement>(
+    document.getElementsByTagName('body')[0]
+  );
+  const pathname = usePathname();
+  const { scrollY, scrollYProgress } = useScroll({
+    container: pageRef,
+  });
+  //use effect
 
   useEffect(() => {
     async function getCategory() {
@@ -31,6 +42,15 @@ export default function CardList() {
       setIsLoading(false);
       return;
     }
+    /**
+     * Fetches cards by category and page number, and updates the state variables.
+     * @remarks
+     * - Sets `isLoading` to true before fetching.
+     * - Sets `isLoading` to false after fetching.
+     * - Updates `cards` state variable with the new cards.
+     * - Updates `pageMax` state variable with the total number of cards.
+     * - If `pageNo` is 1, sets `cards` to the new list of cards. Otherwise, appends the new list to the existing list.
+     */
     async function getCardsByCategory() {
       setIsLoading(true);
       cards_api
@@ -46,37 +66,20 @@ export default function CardList() {
           setCards(cardsNew);
         });
     }
-    getCardsByCategory();
+    !isLoading && getCardsByCategory();
   }, [categoryId, pageNo]);
 
-  useEffect(() => {
-    window.addEventListener('scroll', (e) => {
-      const windowHeight =
-        'innerHeight' in window
-          ? window.innerHeight
-          : document.documentElement.offsetHeight;
-      const body = document.body;
-      const html = document.documentElement;
-      const docHeight = Math.max(
-        body.scrollHeight,
-        body.offsetHeight,
-        html.clientHeight,
-        html.scrollHeight,
-        html.offsetHeight
-      );
-      const windowBottom = windowHeight + window.pageYOffset;
-      if (windowBottom >= docHeight) {
-        if (isLoading) {
-          return;
-        }
-        setIsLoading(true);
-        setPageNo(pageNo + 1);
+  // Listen to the scroll event and check if the user has scrolled to the bottom of the page then fetch more data
+  useMotionValueEvent(scrollY, 'change', () => {
+    const scrollSize = scrollYProgress.get();
+
+    if (scrollSize > 0.9) {
+      if (isLoading) {
+        return;
       }
-    });
-    return function () {
-      window.removeEventListener('scroll', () => {});
-    };
-  }, [isLoading, pageNo, categoryId]);
+      setPageNo(pageNo + 1);
+    }
+  });
   return (
     <div>
       <div className='flex items-center gap-5 mt-3 mb-5'>
@@ -110,11 +113,11 @@ export default function CardList() {
 
 function Cards({ cards, isLoading }: { cards: Card[]; isLoading: Boolean }) {
   return (
-    <div className=' items-center justify-start grid gap-5  grid-cols-5 '>
+    <div className=' items-center justify-start grid gap-5  grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 '>
       {cards.map((card: Card) => {
         return (
           <div className=' '>
-            <div className='h-[400px] flex items-center'>
+            <div className='h-fit flex items-center'>
               <CardDetailPopup card={card}>
                 <img
                   className='w-full  object-contain rounded-xl '

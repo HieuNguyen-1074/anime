@@ -17,20 +17,19 @@ import { emblems_api } from '@/app/_api/emblems';
 
 import rankIcon from '../../../_assets/_images/quality.png';
 import Image from 'next/image';
-import CardsTooltip from './CardsTooltip';
-
 export default function EmblemsList({ emblems }: { emblems: Emblem[] }) {
+  //state
   const [emblem, setEmblem] = useState<Emblem | null>(null);
 
   return (
-    <div className='flex  flex-wrap w-[590px] mt-4'>
+    <div className='flex  flex-wrap w-full  lg:max-w-[590px] mt-4 '>
       {emblems.slice(0, 11).map((emblem: Emblem, index: number) => {
         return (
           <div
             key={emblem._id.$oid}
             onClick={() => setEmblem(emblem)}
-            className={`size-[80px] p-1 rounded-full hover:bg-white/35 ${
-              index === 6 && 'ml-[34px]'
+            className={` size-[60px] lg:size-[80px] p-1 rounded-full hover:bg-white/35 ${
+              index === 6 && 'lg:ml-[34px]'
             }`}>
             <Move3D className=''>
               <img
@@ -43,9 +42,9 @@ export default function EmblemsList({ emblems }: { emblems: Emblem[] }) {
       })}
       {emblems.length > 11 && (
         <div
-          className='size-[80px]  cursor-pointer   hover:bg-white/35 rounded-full p-2'
+          className='size-[60px] lg:size-[80px]   cursor-pointer   hover:bg-white/35 rounded-full p-2'
           onClick={() => setEmblem(emblems[0])}>
-          <p className='w-full h-full text-center text-white/45 text-[20px] leading-[70px] mx-[auto] border-b-2  bg-black  border-b-white/50 rounded-full'>
+          <p className='w-full h-full text-center text-white/45 leading-[50px] lg:text-[20px] lg:leading-[70px] mx-[auto] border-b-2  bg-black  border-b-white/50 rounded-full'>
             + {emblems.length - 11}
           </p>
         </div>
@@ -75,12 +74,12 @@ function EmblemPopup({
         direction='left'
         onOpenChange={(open: boolean) => !open && setEmblem(null)}
         open={Boolean(emblem)}>
-        <DrawerContent className=' fixed top-0   w-1/2 h-full bg-[#363636] rounded-r-3xl overflow-hidden outline-none mt-20 uppercase'>
+        <DrawerContent className=' fixed top-0 md:w-[700px]   lg:w-[900px]  h-full bg-[#363636] rounded-r-3xl overflow-hidden outline-none mt-20 uppercase'>
           <div className='rounded-none mt-5 w-full h-full '>
             <div className='p-4 pb-0 '>
               <p className='text-[2rem] mb-5 text-white'>Emblems</p>
-              <div className='flex items-start gap-2 '>
-                <div className=' w-3/5 flex  flex-wrap gap-2 items-start  pb-10'>
+              <div className='flex items-start flex-col md:flex-row gap-2 '>
+                <div className=' w-full max-h-[200px] md:max-h-full  md:w-3/5 flex  flex-wrap gap-2 items-start  pb-10 overflow-y-auto'>
                   {emblems.map((emblem: Emblem, index: number) => {
                     return (
                       <div
@@ -125,13 +124,13 @@ function EmblemPopupDetail({ emblem }: { emblem: Emblem | null }) {
 
   if (!emblem) return <></>;
   return (
-    <div className='text-white w-2/5 pr-10'>
+    <div className='text-white w-full md:w-2/5 pr-10'>
       <p className='text-[1.5rem] mb-5 text-white'>Details</p>
       <div className='w-full flex items-center flex-col justify-center'>
         <div className='mx-auto border-4 rounded-full w-fit flex justify-center '>
           <Move3D className=' '>
             <img
-              className='w-full h-full  '
+              className='w-[100px] md:w-full   '
               src={emblem?.image}
               alt=''
             />
@@ -145,7 +144,7 @@ function EmblemPopupDetail({ emblem }: { emblem: Emblem | null }) {
             <p>rank</p>
             <div className=' w-full  flex justify-between items-center mt-4 bg-[#919191] border-[1px] rounded-lg p-5'>
               <Image
-                className='size-[40px] rounded-full bg-white'
+                className=' size-[30px] md:size-[40px] rounded-full bg-white'
                 src={rankIcon}
                 alt=''
               />
@@ -154,9 +153,9 @@ function EmblemPopupDetail({ emblem }: { emblem: Emblem | null }) {
           </div>
           <div className='mt-5'>
             <p>Categories</p>
-            <div className='overflow-y-auto h-[45vh] '>
+            <div className='overflow-y-auto h-fit md:h-[45vh] grid grid-cols-2 md:grid-cols-1  justify-start items-start gap-4 pb-5'>
               {emblemDetail?.categories.map((category: any) => (
-                <div className=' w-full  flex justify-between items-center bg-[#919191] border-[1px] rounded-lg p-5 mt-4'>
+                <div className='   flex justify-between items-center bg-[#919191] border-[1px] rounded-lg  p-3 md:p-5'>
                   <p>{category.name}</p>
                   <div className=' flex items-center rounded-md overflow-hidden border relative'>
                     {category.cards

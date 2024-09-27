@@ -6,11 +6,11 @@ import Music from './(component)/Music';
 
 function BenzPage() {
   return (
-    <div>
+    <>
       <Wrapper />
       <Footer />
       <Music />
-    </div>
+    </>
   );
 }
 

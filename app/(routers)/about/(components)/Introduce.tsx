@@ -12,16 +12,14 @@ import { posts_api } from '@/app/_api/posts';
 import PostDetail from './PostDetail';
 import { STATUS_ABOUT_PAGE } from '@/app/_assets/constants';
 import Loading from './Loading';
+import useScreen from '@/app/hooks/useScreen';
 
 export default function Introduce({
   posts,
   topics,
-}: // topicId,
-// postDetail,
-{
+}: {
   posts: Post[];
   topics: Topic[];
-  // postDetail: Post | undefined;
 }) {
   const [isHiddenName, setIsHiddenName] = useState<boolean>(true);
   const searchs = useSearchParams();
@@ -30,17 +28,33 @@ export default function Introduce({
   const [action, setAction] = useState<string | null>(STATUS_ABOUT_PAGE.INIT);
   const [data, setData] = useState<any>([...posts]);
   const [isSuff, setIsSuff] = useState<boolean>(false);
+  const screenSizes: any = useScreen();
+  const screenCols: any = {
+    'sm': 1,
+    'md': 2,
+    'xmd': 3,
+    'lg': 4,
+    'xl': 4,
+    'xlg': 5,
+    'xxl': 6,
+  };
+  const key: string = Object.keys(screenSizes).reduce(
+    (keyPick: string, key: string) => {
+      if (screenSizes[key] && !keyPick) {
+        return key;
+      }
+      return keyPick;
+    },
+    ''
+  );
 
   const mainRef = useRef<HTMLDivElement>(null);
-
-  const router = useRouter();
   useEffect(() => {
     if (action !== STATUS_ABOUT_PAGE.LIST) {
       setIsHiddenName(true);
     }
 
     const dataNew = isSuff ? [...posts].reverse() : posts;
-    console.log(isSuff, posts, dataNew);
     const data = [
       ...(action === STATUS_ABOUT_PAGE.LIST
         ? [
@@ -109,7 +123,7 @@ export default function Introduce({
             'opacity-0 pointer-events-none '
           } `}>
           <h2 className='text-[4rem]'>WHO WE ARE</h2>
-          <p>
+          <p className=' hidden sm:block'>
             At Azuki, we are building the future of anime through decentralized
             IP co-created with the community and innovative products that enrich
             the anime fan experience. Our Azuki collectibles have generated over
@@ -141,8 +155,11 @@ export default function Introduce({
               action !== STATUS_ABOUT_PAGE.INIT
                 ? 'pt-20  '
                 : 'group-hover:translate-x-10'
-            } ${action === STATUS_ABOUT_PAGE.DETAIL && 'h-[180px]'}`}
-            cols={6}
+            } ${action === STATUS_ABOUT_PAGE.DETAIL && 'h-[180px]'}  ${
+              action === STATUS_ABOUT_PAGE.LIST &&
+              ' overflow-x-hidden hidden-scroll-bar'
+            } `}
+            cols={key ? screenCols[key] : 7}
             gaps={5}
             onClick={() =>
               action === STATUS_ABOUT_PAGE.INIT &&
